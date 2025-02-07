@@ -19,7 +19,7 @@ public class SecurityConfiguration {
   public SecurityFilterChain configure(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(authorize ->
         authorize
-//          .requestMatchers(HttpMethod.GET, "api/categories").permitAll()
+          .requestMatchers(HttpMethod.GET, "api/categories").permitAll()
 //          .requestMatchers(HttpMethod.GET, "api/products-shop/**").permitAll()
 //          .requestMatchers(HttpMethod.GET, "api/orders/get-cart-details").permitAll()
 //          .requestMatchers(HttpMethod.POST, "api/orders/webhook").permitAll()
