@@ -1,5 +1,6 @@
 package com.zhaqsylyq.ecom.product.infrastructure.secondary.repository;
 
+import com.zhaqsylyq.ecom.product.domain.aggregate.FilterQuery;
 import com.zhaqsylyq.ecom.product.domain.aggregate.Picture;
 import com.zhaqsylyq.ecom.product.domain.aggregate.Product;
 import com.zhaqsylyq.ecom.product.domain.repository.ProductRepository;
@@ -81,12 +82,12 @@ public class SpringDataProductRepository implements ProductRepository {
       .map(ProductEntity::to);
   }
 
-//  @Override
-//  public Page<Product> findByCategoryAndSize(Pageable pageable, FilterQuery filterQuery) {
-//    return jpaProductRepository.findByCategoryPublicIdAndSizesIn(
-//      pageable, filterQuery.categoryId().value(), filterQuery.sizes()
-//    ).map(ProductEntity::to);
-//  }
+  @Override
+  public Page<Product> findByCategoryAndSize(Pageable pageable, FilterQuery filterQuery) {
+    return jpaProductRepository.findByCategoryPublicIdAndSizesIn(
+      pageable, filterQuery.categoryId().value(), filterQuery.sizes()
+    ).map(ProductEntity::to);
+  }
 
   @Override
   public List<Product> findByPublicIds(List<PublicId> publicIds) {

@@ -1,5 +1,6 @@
 package com.zhaqsylyq.ecom.product.domain.repository;
 
+import com.zhaqsylyq.ecom.product.domain.aggregate.FilterQuery;
 import com.zhaqsylyq.ecom.product.domain.aggregate.Product;
 import com.zhaqsylyq.ecom.product.domain.vo.PublicId;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,7 @@ public interface ProductRepository {
 
   Page<Product> findByCategoryExcludingOne(Pageable pageable, PublicId categoryPublicId, PublicId productPublicId);
 
-//  Page<Product> findByCategoryAndSize(Pageable pageable, FilterQuery filterQuery);
+  Page<Product> findByCategoryAndSize(Pageable pageable, FilterQuery filterQuery);
 
   List<Product> findByPublicIds(List<PublicId> publicIds);
 
