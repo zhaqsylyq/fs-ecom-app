@@ -6,6 +6,8 @@ import {CreateProductComponent} from "./admin/product/create-product/create-prod
 import {AdminProductsComponent} from "./admin/product/admin-products/admin-products.component";
 import {HomeComponent} from "./home/home.component";
 import {ProductDetailComponent} from "./shop/product-detail/product-detail.component";
+import {ProductsComponent} from "./shop/products/products.component";
+import {CartComponent} from "./shop/cart/cart.component";
 // import { roleCheckGuard } from './auth/role-check.guard';
 // import { CreateProductComponent } from './admin/product/create-product/create-product.component';
 // import { AdminProductsComponent } from './admin/product/admin-products/admin-products.component';
@@ -66,14 +68,14 @@ export const appRoutes: Route[] = [
     path: 'product/:publicId',
     component: ProductDetailComponent,
   },
-  // {
-  //   path: 'products',
-  //   component: ProductsComponent,
-  // },
-  // {
-  //   path: 'cart',
-  //   component: CartComponent,
-  // },
+  {
+    path: 'products',
+    component: ProductsComponent,
+  },
+  {
+    path: 'cart',
+    component: CartComponent,
+  },
   // {
   //   path: 'cart/success',
   //   component: CartSuccessComponent,
