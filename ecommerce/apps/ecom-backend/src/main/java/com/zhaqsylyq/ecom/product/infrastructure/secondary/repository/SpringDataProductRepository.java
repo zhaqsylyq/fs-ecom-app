@@ -1,5 +1,6 @@
 package com.zhaqsylyq.ecom.product.infrastructure.secondary.repository;
 
+import com.zhaqsylyq.ecom.order.domain.order.vo.ProductPublicId;
 import com.zhaqsylyq.ecom.product.domain.aggregate.FilterQuery;
 import com.zhaqsylyq.ecom.product.domain.aggregate.Picture;
 import com.zhaqsylyq.ecom.product.domain.aggregate.Product;
@@ -96,8 +97,8 @@ public class SpringDataProductRepository implements ProductRepository {
       .stream().map(ProductEntity::to).toList();
   }
 
-//  @Override
-//  public void updateQuantity(ProductPublicId productPublicId, long quantity) {
-//    jpaProductRepository.updateQuantity(productPublicId.value(), quantity);
-//  }
+  @Override
+  public void updateQuantity(ProductPublicId productPublicId, long quantity) {
+    jpaProductRepository.updateQuantity(productPublicId.value(), quantity);
+  }
 }

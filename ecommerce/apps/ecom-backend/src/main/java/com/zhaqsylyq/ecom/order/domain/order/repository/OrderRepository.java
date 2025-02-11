@@ -1,6 +1,7 @@
 package com.zhaqsylyq.ecom.order.domain.order.repository;
 
 import com.zhaqsylyq.ecom.order.domain.order.aggregate.Order;
+import com.zhaqsylyq.ecom.order.domain.order.aggregate.StripeSessionInformation;
 import com.zhaqsylyq.ecom.order.domain.order.vo.OrderStatus;
 import com.zhaqsylyq.ecom.order.domain.user.vo.UserPublicId;
 import com.zhaqsylyq.ecom.product.domain.vo.PublicId;
@@ -15,7 +16,7 @@ public interface OrderRepository {
 
   void updateStatusByPublicId(OrderStatus orderStatus, PublicId orderPublicId);
 
-//  Optional<Order> findByStripeSessionId(StripeSessionInformation stripeSessionInformation);
+  Optional<Order> findByStripeSessionId(StripeSessionInformation stripeSessionInformation);
 
   Page<Order> findAllByUserPublicId(UserPublicId userPublicId, Pageable pageable);
 

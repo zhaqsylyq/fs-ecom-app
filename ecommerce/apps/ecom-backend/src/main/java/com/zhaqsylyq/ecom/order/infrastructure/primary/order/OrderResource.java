@@ -1,16 +1,21 @@
 package com.zhaqsylyq.ecom.order.infrastructure.primary.order;
 
-//import com.stripe.exception.SignatureVerificationException;
-//import com.stripe.model.Address;
-//import com.stripe.model.Event;
-//import com.stripe.model.StripeObject;
-//import com.stripe.model.checkout.Session;
-//import com.stripe.net.Webhook;
+import com.stripe.exception.SignatureVerificationException;
+import com.stripe.model.Address;
+import com.stripe.model.Event;
+import com.stripe.model.StripeObject;
+import com.stripe.model.checkout.Session;
+import com.stripe.net.Webhook;
 
+import com.stripe.exception.SignatureVerificationException;
+import com.stripe.model.Event;
+import com.stripe.model.StripeObject;
+import com.stripe.net.Webhook;
 import com.zhaqsylyq.ecom.order.application.OrderApplicationService;
 import com.zhaqsylyq.ecom.order.domain.order.CartPaymentException;
 import com.zhaqsylyq.ecom.order.domain.order.aggregate.*;
 import com.zhaqsylyq.ecom.order.domain.order.vo.StripeSessionId;
+import com.zhaqsylyq.ecom.order.domain.user.vo.*;
 import com.zhaqsylyq.ecom.product.domain.vo.PublicId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -63,74 +68,74 @@ public class OrderResource {
     }
   }
 
-//  @PostMapping("/webhook")
-//  public ResponseEntity<Void> webhookStripe(@RequestBody String paymentEvent,
-//                                            @RequestHeader("Stripe-Signature") String stripeSignature) {
-//    Event event = null;
-//    try {
-//      event = Webhook.constructEvent(
-//        paymentEvent, stripeSignature, webhookSecret
-//      );
-//    } catch (SignatureVerificationException e) {
-//      return ResponseEntity.badRequest().build();
-//    }
-//
-//    Optional<StripeObject> rawStripeObjectOpt = event.getDataObjectDeserializer().getObject();
-//
-//    switch (event.getType()) {
-//      case "checkout.session.completed":
-//        handleCheckoutSessionCompleted(rawStripeObjectOpt.orElseThrow());
-//        break;
-//    }
-//
-//    return ResponseEntity.ok().build();
-//  }
+  @PostMapping("/webhook")
+  public ResponseEntity<Void> webhookStripe(@RequestBody String paymentEvent,
+                                            @RequestHeader("Stripe-Signature") String stripeSignature) {
+    Event event = null;
+    try {
+      event = Webhook.constructEvent(
+        paymentEvent, stripeSignature, webhookSecret
+      );
+    } catch (SignatureVerificationException e) {
+      return ResponseEntity.badRequest().build();
+    }
 
-//  private void handleCheckoutSessionCompleted(StripeObject rawStripeObject) {
-//    if (rawStripeObject instanceof Session session) {
-//      Address address = session.getCustomerDetails().getAddress();
-//
-//      UserAddress userAddress = UserAddressBuilder.userAddress()
-//        .city(address.getCity())
-//        .country(address.getCountry())
-//        .zipCode(address.getPostalCode())
-//        .street(address.getLine1())
-//        .build();
-//
-//      UserAddressToUpdate userAddressToUpdate = UserAddressToUpdateBuilder.userAddressToUpdate()
-//        .userAddress(userAddress)
-//        .userPublicId(new UserPublicId(UUID.fromString(session.getMetadata().get("user_public_id"))))
-//        .build();
-//
-//      StripeSessionInformation sessionInformation = StripeSessionInformationBuilder.stripeSessionInformation()
-//        .userAddress(userAddressToUpdate)
-//        .stripeSessionId(new StripeSessionId(session.getId()))
-//        .build();
-//
-//      orderApplicationService.updateOrder(sessionInformation);
-//    }
-//  }
+    Optional<StripeObject> rawStripeObjectOpt = event.getDataObjectDeserializer().getObject();
 
-//  @GetMapping("/user")
-//  public ResponseEntity<Page<RestOrderRead>> getOrdersForConnectedUser(Pageable pageable) {
-//    Page<Order> orders = orderApplicationService.findOrdersForConnectedUser(pageable);
-//    PageImpl<RestOrderRead> restOrderReads = new PageImpl<>(
-//      orders.getContent().stream().map(RestOrderRead::from).toList(),
-//      pageable,
-//      orders.getTotalElements()
-//    );
-//    return ResponseEntity.ok(restOrderReads);
-//  }
+    switch (event.getType()) {
+      case "checkout.session.completed":
+        handleCheckoutSessionCompleted(rawStripeObjectOpt.orElseThrow());
+        break;
+    }
 
-//  @GetMapping("/admin")
-//  @PreAuthorize("hasAnyRole('" + ROLE_ADMIN + "')")
-//  public ResponseEntity<Page<RestOrderReadAdmin>> getOrdersForAdmin(Pageable pageable) {
-//    Page<Order> orders = orderApplicationService.findOrdersForAdmin(pageable);
-//    PageImpl<RestOrderReadAdmin> restOrderReads = new PageImpl<>(
-//      orders.getContent().stream().map(RestOrderReadAdmin::from).toList(),
-//      pageable,
-//      orders.getTotalElements()
-//    );
-//    return ResponseEntity.ok(restOrderReads);
-//  }
+    return ResponseEntity.ok().build();
+  }
+
+  private void handleCheckoutSessionCompleted(StripeObject rawStripeObject) {
+    if (rawStripeObject instanceof Session session) {
+      Address address = session.getCustomerDetails().getAddress();
+
+      UserAddress userAddress = UserAddressBuilder.userAddress()
+        .city(address.getCity())
+        .country(address.getCountry())
+        .zipCode(address.getPostalCode())
+        .street(address.getLine1())
+        .build();
+
+      UserAddressToUpdate userAddressToUpdate = UserAddressToUpdateBuilder.userAddressToUpdate()
+        .userAddress(userAddress)
+        .userPublicId(new UserPublicId(UUID.fromString(session.getMetadata().get("user_public_id"))))
+        .build();
+
+      StripeSessionInformation sessionInformation = StripeSessionInformationBuilder.stripeSessionInformation()
+        .userAddress(userAddressToUpdate)
+        .stripeSessionId(new StripeSessionId(session.getId()))
+        .build();
+
+      orderApplicationService.updateOrder(sessionInformation);
+    }
+  }
+
+  @GetMapping("/user")
+  public ResponseEntity<Page<RestOrderRead>> getOrdersForConnectedUser(Pageable pageable) {
+    Page<Order> orders = orderApplicationService.findOrdersForConnectedUser(pageable);
+    PageImpl<RestOrderRead> restOrderReads = new PageImpl<>(
+      orders.getContent().stream().map(RestOrderRead::from).toList(),
+      pageable,
+      orders.getTotalElements()
+    );
+    return ResponseEntity.ok(restOrderReads);
+  }
+
+  @GetMapping("/admin")
+  @PreAuthorize("hasAnyRole('" + ROLE_ADMIN + "')")
+  public ResponseEntity<Page<RestOrderReadAdmin>> getOrdersForAdmin(Pageable pageable) {
+    Page<Order> orders = orderApplicationService.findOrdersForAdmin(pageable);
+    PageImpl<RestOrderReadAdmin> restOrderReads = new PageImpl<>(
+      orders.getContent().stream().map(RestOrderReadAdmin::from).toList(),
+      pageable,
+      orders.getTotalElements()
+    );
+    return ResponseEntity.ok(restOrderReads);
+  }
 }

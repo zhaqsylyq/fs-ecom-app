@@ -1,5 +1,6 @@
 package com.zhaqsylyq.ecom.product.domain.repository;
 
+import com.zhaqsylyq.ecom.order.domain.order.vo.ProductPublicId;
 import com.zhaqsylyq.ecom.product.domain.aggregate.FilterQuery;
 import com.zhaqsylyq.ecom.product.domain.aggregate.Product;
 import com.zhaqsylyq.ecom.product.domain.vo.PublicId;
@@ -27,5 +28,5 @@ public interface ProductRepository {
 
   List<Product> findByPublicIds(List<PublicId> publicIds);
 
-//  void updateQuantity(ProductPublicId productPublicId, long quantity);
+  void updateQuantity(ProductPublicId productPublicId, long quantity);
 }

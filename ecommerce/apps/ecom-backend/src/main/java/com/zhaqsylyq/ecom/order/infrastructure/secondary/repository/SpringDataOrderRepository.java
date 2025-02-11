@@ -1,6 +1,7 @@
 package com.zhaqsylyq.ecom.order.infrastructure.secondary.repository;
 
 import com.zhaqsylyq.ecom.order.domain.order.aggregate.Order;
+import com.zhaqsylyq.ecom.order.domain.order.aggregate.StripeSessionInformation;
 import com.zhaqsylyq.ecom.order.domain.order.repository.OrderRepository;
 import com.zhaqsylyq.ecom.order.domain.order.vo.OrderStatus;
 import com.zhaqsylyq.ecom.order.domain.user.vo.UserPublicId;
@@ -39,11 +40,11 @@ public class SpringDataOrderRepository implements OrderRepository {
     jpaOrderRepository.updateStatusByPublicId(orderStatus, orderPublicId.value());
   }
 
-//  @Override
-//  public Optional<Order> findByStripeSessionId(StripeSessionInformation stripeSessionInformation) {
-//    return jpaOrderRepository.findByStripeSessionId(stripeSessionInformation.stripeSessionId().value())
-//      .map(OrderEntity::toDomain);
-//  }
+  @Override
+  public Optional<Order> findByStripeSessionId(StripeSessionInformation stripeSessionInformation) {
+    return jpaOrderRepository.findByStripeSessionId(stripeSessionInformation.stripeSessionId().value())
+      .map(OrderEntity::toDomain);
+  }
 
   @Override
   public Page<Order> findAllByUserPublicId(UserPublicId userPublicId, Pageable pageable) {
